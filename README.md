@@ -6,10 +6,7 @@ A modular CLI framework for managing workspace apps built with Bun. Apps can def
 
 ```bash
 # Install dependencies
-bun install
-
-# Or run directly with bun x
-bun x nailgun --help
+bun install --global nailgun@latest
 ```
 
 ## Usage

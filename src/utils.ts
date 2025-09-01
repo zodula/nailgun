@@ -37,6 +37,7 @@ export async function runCommand(command: string, cwd?: string) {
     const exitCode = await proc.exited;
     return exitCode === 0;
   } catch (error) {
+    console.log(error);
     logger.error(`Command failed: ${command}`);
     return false;
   }
