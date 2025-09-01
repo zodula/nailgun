@@ -1,0 +1,29 @@
+{
+  "name": "nailgun",
+  "version": "1.0.24",
+  "description": "A modular CLI framework for managing workspace apps",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "type": "module",
+  "bin": {
+    "nailgun": "./src/cli.ts",
+    "ngun": "./src/cli.ts"
+  },
+  "keywords": [
+    "cli",
+    "framework",
+    "workspace",
+    "modular"
+  ],
+  "dependencies": {
+    "commander": "^14.0.0",
+    "signale": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/signale": "^1.4.7"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
