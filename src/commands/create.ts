@@ -23,17 +23,65 @@ export function createCommand(program: Command) {
         process.exit(1);
       }
 
-      Bun.write(join(projectPath, 'package.json'), JSON.stringify({
+      await Bun.write(join(projectPath, 'package.json'), JSON.stringify({
         name: projectName || 'nailgun-project',
         version: '1.0.0',
         type: 'module',
-        workspaces: ['apps/*'],
+        "workspaces": [
+          "apps/*",
+          "apps/*/ui"
+        ],
         nailgun: {
           apps: [],
           branch: defaultBranch
         }
       }, null, 2));
-      Bun.write(join(projectPath, 'apps', '.keep'), '');
+
+      await Bun.write(join(projectPath, 'tsconfig.json'), JSON.stringify({
+        "compilerOptions": {
+          // Environment setup & latest features
+          "lib": [
+            "ES2022",
+            "DOM",
+            "DOM.Iterable"
+          ],
+          "target": "ESNext",
+          "module": "Preserve",
+          "moduleDetection": "force",
+          "jsx": "preserve",
+          "allowJs": true,
+          // Bundler mode
+          "moduleResolution": "bundler",
+          "allowImportingTsExtensions": true,
+          "verbatimModuleSyntax": true,
+          "noEmit": true,
+          "baseUrl": ".",
+          "paths": {
+            "@/*": [
+              "./apps/*"
+            ]
+          },
+          // Best practices
+          "strict": true,
+          "skipLibCheck": true,
+          "noFallthroughCasesInSwitch": true,
+          "noUncheckedIndexedAccess": true,
+          "noImplicitOverride": true,
+          // Some stricter flags (disabled by default)
+          "noUnusedLocals": false,
+          "noUnusedParameters": false,
+          "noPropertyAccessFromIndexSignature": false
+        },
+        "include": [
+          ".zodula/**/*.d.ts",
+          "apps/**/*"
+        ],
+        "exclude": [
+          "node_modules"
+        ]
+      }, null, 2));
+
+      await Bun.write(join(projectPath, 'apps', '.keep'), '');
 
       // Initialize bun project
       const success = await runCommand('bun install', projectPath);
@@ -45,7 +93,7 @@ export function createCommand(program: Command) {
       // Install @zodula/zodula as initial app
       logger.info('Installing @zodula/zodula...');
       // TODO: Implement install-app functionality for @zodula/zodula
-      $.cwd(path.resolve(projectPath, "apps"))`git clone https://github.com/zodula/zodula.git -b ${defaultBranch}`
+      await $.cwd(path.resolve(projectPath, "apps"))`git clone https://github.com/zodula/zodula.git -b ${defaultBranch}`
 
       // run bun install in project path
       const installSuccess = await runCommand('bun install', projectPath);
