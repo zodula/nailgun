@@ -29,7 +29,7 @@ export function createCommand(program: Command) {
         type: 'module',
         "workspaces": [
           "apps/*",
-          "apps/*/ui"
+          "apps/*/*"
         ],
         nailgun: {
           apps: [],

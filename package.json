@@ -1,6 +1,6 @@
 {
   "name": "nailgun",
-  "version": "1.0.31",
+  "version": "1.0.33",
   "description": "A modular CLI framework for managing workspace apps",
   "main": "./src/index.ts",
   "module": "./src/index.ts",

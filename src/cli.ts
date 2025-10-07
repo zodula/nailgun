@@ -4,7 +4,10 @@ import { Command } from 'commander';
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { createCommand } from './commands/create.js';
+import { upgradeCommand } from './commands/upgrade.js';
+import { versionCommand } from './commands/version.js';
 import { logger, readPackageJson } from './utils.js';
+import { versionCheckMiddleware } from './middleware.js';
 import packageJson from '../package.json'
 
 const program = new Command();
@@ -17,6 +20,8 @@ program
 
 // Register core commands
 createCommand(program);
+upgradeCommand(program);
+versionCommand(program);
 // Dynamic command loading from apps
 async function loadAppCommands() {
   const appsPath = join(process.cwd(), 'apps');
@@ -82,6 +87,9 @@ async function loadAppCommands() {
 
 // Load dynamic commands and then parse arguments
 async function main() {
+  // Check for version updates before running any command
+  await versionCheckMiddleware();
+  
   await loadAppCommands();
   program.parse();
 }
